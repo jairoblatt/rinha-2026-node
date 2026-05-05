@@ -1,6 +1,6 @@
 services:
   api1: &api
-    image: jrblatt/rinha-2026-node:v0.1.0
+    image: jrblatt/rinha-2026-node:v0.1.1
     environment:
       - SOCK=/run/sock/api1.sock
     volumes:
