@@ -31,7 +31,6 @@ let buf: Buffer = Buffer.alloc(0);
 const merchantStarts = new Int32Array(16);
 const merchantEnds = new Int32Array(16);
 
-// [year, month, day, hour, minute]
 const iso = new Int16Array(5);
 
 const payload: Payload = {
@@ -190,16 +189,16 @@ export function parse(buffer: Buffer): Payload {
   p = 0;
 
   toNextValue();
-  skipString(); // transaction_id
+  skipString();
 
-  toNextValue(); // transaction object
-  toNextValue(); // amount
+  toNextValue();
+  toNextValue();
   payload.amount = scanF32();
 
-  toNextValue(); // installments
+  toNextValue();
   payload.installments = scanU32();
 
-  toNextValue(); // requested_at
+  toNextValue();
   scanIso();
   const reqY = iso[0],
     reqMo = iso[1],
@@ -209,16 +208,15 @@ export function parse(buffer: Buffer): Payload {
   payload.hour = reqH;
   payload.dayOfWeek = dayOfWeek(reqY, reqMo, reqD);
 
-  toNextValue(); // customer object
-  toNextValue(); // avg_amount
+  toNextValue();
+  toNextValue();
   payload.customerAvgAmount = scanF32();
 
-  toNextValue(); // tx_count_24h
+  toNextValue();
   payload.txCount24h = scanU32();
 
-  // merchant_history array
   toNextValue();
-  p++; // skip '['
+  p++;
   let mc = 0;
   const len = buf.length;
   while (p < len && buf[p] !== CLOSE_BRACKET) {
@@ -233,37 +231,37 @@ export function parse(buffer: Buffer): Payload {
       p++;
     }
   }
-  if (p < len) p++; // skip ']'
+  if (p < len) p++;
 
-  toNextValue(); // merchant object
-  toNextValue(); // merchant_id
+  toNextValue();
+  toNextValue();
   if (p < len && buf[p] === QUOTE) p++;
   const midStart = p;
   while (p < len && buf[p] !== QUOTE) p++;
   const midEnd = p;
   p++;
 
-  toNextValue(); // mcc
+  toNextValue();
   payload.mcc = scanMcc();
 
-  toNextValue(); // merchant_avg_amount
+  toNextValue();
   payload.merchantAvgAmount = scanF32();
 
-  toNextValue(); // payment object
-  toNextValue(); // is_online
+  toNextValue();
+  toNextValue();
   payload.isOnline = scanBool();
 
-  toNextValue(); // card_present
+  toNextValue();
   payload.cardPresent = scanBool();
 
-  toNextValue(); // km_from_home
+  toNextValue();
   payload.kmFromHome = scanF32();
 
-  toNextValue(); // last_tx
+  toNextValue();
   payload.hasLastTx = p < len && buf[p] !== CHAR_N;
 
   if (payload.hasLastTx) {
-    toNextValue(); // timestamp
+    toNextValue();
     scanIso();
     const ltY = iso[0],
       ltMo = iso[1],
@@ -271,7 +269,7 @@ export function parse(buffer: Buffer): Payload {
       ltH = iso[3],
       ltMin = iso[4];
 
-    toNextValue(); // km_from_current
+    toNextValue();
     payload.kmFromCurrent = scanF32();
     payload.minutesSinceLast = minutesBetween(ltY, ltMo, ltD, ltH, ltMin, reqY, reqMo, reqD, reqH, reqMin);
   } else {
@@ -279,7 +277,6 @@ export function parse(buffer: Buffer): Payload {
     payload.minutesSinceLast = 0;
   }
 
-  // is_unknown_merchant: compare byte-by-byte, zero allocation
   const midLen = midEnd - midStart;
   payload.isUnknownMerchant = true;
   for (let i = 0; i < mc; i++) {

@@ -16,6 +16,7 @@ export function startServer(sockPath: string) {
         throw new Error("listen failed");
       }
 
-      console.log("listening on", sockPath);
+      fs.chmodSync(sockPath, 0o666);
+    console.log("listening on", sockPath);
     }, sockPath);
 }

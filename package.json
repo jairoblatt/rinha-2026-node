@@ -4,6 +4,7 @@
   "description": "",
   "main": "src/main.ts",
   "scripts": {
+    "build:native": "cd core && RUSTFLAGS=\"-C target-cpu=native\" cargo build --release && cp target/release/librinha_knn.so rinha-knn.node",
     "start:dev": "tsx watch src/main.ts"
   },
   "keywords": [],
