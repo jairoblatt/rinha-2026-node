@@ -1,6 +1,6 @@
 import uWS from "uWebSockets.js";
 import fs from "node:fs";
-import { handleFraud, handleReady } from "./handlers";
+import { handleFraud, handleNotFound, handleReady } from "./handlers";
 import { Log } from "./log";
 
 export function startServer(sockPath: string) {
@@ -12,6 +12,7 @@ export function startServer(sockPath: string) {
     .App()
     .get("/ready", (res) => handleReady(res))
     .post("/fraud-score", (res) => handleFraud(res))
+    .any("/*", (res) => handleNotFound(res))
     .listen_unix((token) => {
       if (!token) {
         throw new Error("listen failed");

@@ -8,10 +8,16 @@ import {
   CONTENT_TYPE_JSON,
   CONTENT_LENGTH_KEY,
   CONTENT_LENGTH_ZERO,
+  STATUS_404,
 } from "./response";
 import { initKnn, knnFraudCount } from "../core/index";
 
 initKnn();
+
+export function handleNotFound(res: uWS.HttpResponse): void {
+  res.onAborted(() => {});
+  res.writeStatus(STATUS_404 as unknown as string).end();
+}
 
 export function handleReady(res: uWS.HttpResponse): void {
   res.onAborted(() => {});
