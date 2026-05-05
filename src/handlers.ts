@@ -10,9 +10,7 @@ import {
   CONTENT_LENGTH_ZERO,
   STATUS_404,
 } from "./response";
-import { initKnn, knnFraudCount } from "../core/index";
-
-initKnn();
+import { knnFraudCount } from "../core/index";
 
 export function handleNotFound(res: uWS.HttpResponse): void {
   res.onAborted(() => {});
