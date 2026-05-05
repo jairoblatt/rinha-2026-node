@@ -15,18 +15,26 @@ process.on("unhandledRejection", (reason) => {
     "unhandledRejection",
     reason instanceof Error ? (reason.stack ?? reason.message) : String(reason),
   );
+
   process.exit(1);
 });
 
 const sockPath = process.env.SOCK || "/tmp/app.sock";
 
 function shutdown(): void {
-  try { fs.unlinkSync(sockPath); } catch {}
+  try {
+    fs.unlinkSync(sockPath);
+  } catch {}
   process.exit(0);
 }
 
 process.on("SIGTERM", shutdown);
 process.on("SIGINT", shutdown);
+process.on("SIGHUP", shutdown);
+
+process.on("exit", (code) => {
+  Log.info(`process exiting with code ${code}`);
+});
 
 const t0 = performance.now();
 initKnn();
