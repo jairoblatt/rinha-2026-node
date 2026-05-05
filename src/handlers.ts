@@ -3,12 +3,7 @@ import { parse } from "./parse";
 import { vectorize } from "./vector";
 import {
   EMPTY_BODY,
-  FRAUD_BODY_0,
-  FRAUD_BODY_1,
-  FRAUD_BODY_2,
-  FRAUD_BODY_3,
-  FRAUD_BODY_4,
-  FRAUD_BODY_5,
+  FRAUD_BODIES,
   CONTENT_TYPE_KEY,
   CONTENT_TYPE_JSON,
   CONTENT_LENGTH_KEY,
@@ -17,15 +12,6 @@ import {
 import { initKnn, knnFraudCount } from "../core/index";
 
 initKnn();
-
-const FRAUD_BODIES = [
-  FRAUD_BODY_0,
-  FRAUD_BODY_1,
-  FRAUD_BODY_2,
-  FRAUD_BODY_3,
-  FRAUD_BODY_4,
-  FRAUD_BODY_5,
-];
 
 export function handleReady(res: uWS.HttpResponse): void {
   res.onAborted(() => {});
@@ -45,16 +31,24 @@ export function handleFraud(res: uWS.HttpResponse): void {
 
     const vec = vectorize(parse(Buffer.from(chunk)));
     const score = knnFraudCount(
-      vec[0], vec[1], vec[2], vec[3],
-      vec[4], vec[5], vec[6], vec[7],
-      vec[8], vec[9], vec[10], vec[11],
-      vec[12], vec[13],
+      vec[0],
+      vec[1],
+      vec[2],
+      vec[3],
+      vec[4],
+      vec[5],
+      vec[6],
+      vec[7],
+      vec[8],
+      vec[9],
+      vec[10],
+      vec[11],
+      vec[12],
+      vec[13],
     );
 
     res.cork(() => {
-      res
-        .writeHeader(CONTENT_TYPE_KEY, CONTENT_TYPE_JSON)
-        .end(FRAUD_BODIES[score]);
+      res.writeHeader(CONTENT_TYPE_KEY, CONTENT_TYPE_JSON).end(FRAUD_BODIES[score]);
     });
   });
 }

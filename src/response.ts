@@ -5,6 +5,15 @@ export const FRAUD_BODY_3 = Buffer.from('{"approved":false,"fraud_score":0.6}');
 export const FRAUD_BODY_4 = Buffer.from('{"approved":false,"fraud_score":0.8}');
 export const FRAUD_BODY_5 = Buffer.from('{"approved":false,"fraud_score":1.0}');
 
+export const FRAUD_BODIES = [
+  FRAUD_BODY_0,
+  FRAUD_BODY_1,
+  FRAUD_BODY_2,
+  FRAUD_BODY_3,
+  FRAUD_BODY_4,
+  FRAUD_BODY_5,
+];
+
 export const EMPTY_BODY = Buffer.alloc(0);
 
 export const CONTENT_TYPE_KEY = Buffer.from("Content-Type");
