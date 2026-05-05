@@ -2,12 +2,9 @@ import uWS from "uWebSockets.js";
 import { parse } from "./parse";
 import { vectorize } from "./vector";
 import {
-  EMPTY_BODY,
   FRAUD_BODIES,
   CONTENT_TYPE_KEY,
   CONTENT_TYPE_JSON,
-  CONTENT_LENGTH_KEY,
-  CONTENT_LENGTH_ZERO,
   STATUS_404,
 } from "./response";
 import { knnFraudCount } from "../core/index";
@@ -19,9 +16,8 @@ export function handleNotFound(res: uWS.HttpResponse): void {
 
 export function handleReady(res: uWS.HttpResponse): void {
   res.onAborted(() => {});
-
   res.cork(() => {
-    res.writeHeader(CONTENT_LENGTH_KEY, CONTENT_LENGTH_ZERO).end(EMPTY_BODY);
+    res.end();
   });
 }
 

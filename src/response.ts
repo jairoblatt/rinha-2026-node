@@ -14,12 +14,7 @@ export const FRAUD_BODIES = [
   FRAUD_BODY_5,
 ];
 
-export const EMPTY_BODY = Buffer.alloc(0);
-
 export const CONTENT_TYPE_KEY = Buffer.from("Content-Type");
 export const CONTENT_TYPE_JSON = Buffer.from("application/json");
-
-export const CONTENT_LENGTH_KEY = Buffer.from("Content-Length");
-export const CONTENT_LENGTH_ZERO = Buffer.from("0");
 
 export const STATUS_404 = Buffer.from("404 Not Found");
