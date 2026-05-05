@@ -1,6 +1,7 @@
 import uWS from "uWebSockets.js";
 import fs from "node:fs";
 import { handleFraud, handleReady } from "./handlers";
+import { Log } from "./log";
 
 export function startServer(sockPath: string) {
   if (fs.existsSync(sockPath)) {
@@ -17,6 +18,6 @@ export function startServer(sockPath: string) {
       }
 
       fs.chmodSync(sockPath, 0o666);
-    console.log("listening on", sockPath);
+      Log.info("listening on", sockPath);
     }, sockPath);
 }
